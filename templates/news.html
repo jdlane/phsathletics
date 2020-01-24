@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">News
+    </h1>
+
+    <ul>
+      {% for event in news %}
+      {% if loop.index0 != 0 %}
+      <li>{{event.text}}</li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+
+    
+  </div>
+
+    <!-- Content Row -->
+  <!-- /.container -->
+
+ {% endblock %}

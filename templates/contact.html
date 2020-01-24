@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3 text-center text-dark-purple">Contacts
+    </h1>
+        <ul>
+      {% for contact in contacts %}
+      {% if contact.season == 'none' %}
+      <li>{{contact.name}}, {{contact.position}} <a href="mailto:{{contact.email}}">{{contact.email}}</a></li>
+      <hr>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    
+    <br>
+    <h3 class="text-dark-purple">Fall</h3>
+            <ul>
+      {% for contact in contacts %}
+      {% if contact.season == 'fall' %}
+      <li>{{contact.name}}, {{contact.position}} <a href="mailto:{{contact.email}}">{{contact.email}}</a></li>
+      <hr>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    <br>
+    <h3 class="text-dark-purple">Winter</h3>
+                <ul>
+      {% for contact in contacts %}
+      {% if contact.season == 'winter' %}
+      <li>{{contact.name}}, {{contact.position}} <a href="mailto:{{contact.email}}">{{contact.email}}</a></li>
+      <hr>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    <br>
+    <h3 class="text-dark-purple">Spring</h3>
+                    <ul>
+      {% for contact in contacts %}
+      {% if contact.season == 'spring' %}
+      <li>{{contact.name}}, {{contact.position}} <a href="mailto:{{contact.email}}">{{contact.email}}</a></li>
+      <hr>
+      {% endif %}
+      {% endfor %}
+    </ul>
+
+
+    
+  </div>
+
+    <!-- Content Row -->
+  <!-- /.container -->
+
+ {% endblock %}

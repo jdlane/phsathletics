@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Upcoming Events
+    </h1>
+
+    <ul>
+      {% for event in upcoming %}
+      {% if loop.index0 != 0 %}
+      <li>{{event.date}}: {{event.text}}</li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+
+    
+  </div>
+
+    <!-- Content Row -->
+  <!-- /.container -->
+
+ {% endblock %}

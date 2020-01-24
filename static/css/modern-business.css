@@ -1,0 +1,85 @@
+/*!
+ * Start Bootstrap - Modern Business (https://startbootstrap.com/template-overviews/modern-business)
+ * Copyright 2013-2019 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-logomodern-business-nav/blob/master/LICENSE)
+ */
+body {
+  padding-top: 56px;
+}
+
+.margin-small{
+  margin: 20px;
+}
+
+.navbar{
+  background-color: #9301c5;
+}
+
+ul{
+   list-style-image: url('/img/pawprint.png');
+}
+
+
+#tato{
+  background-size: 80% 80%;
+}
+
+.carousel-indicators li{
+  //border: 1px solid rgb(46, 46, 46);
+  background-color: #350031;
+}
+
+.text-purple{
+  color:#9301c5;
+}
+
+.text-dark-purple{
+  color:#9a4caa;
+}
+
+.thumbnail-box{
+  
+  object-fit: contain;
+}
+
+.thumbnail-box img{
+  width: 70px;
+  height: 70px;
+}
+
+.navbar-dark .navbar-brand {
+  color: #c63ad3;
+}
+
+.navbar-dark .navbar-brand:hover, .navbar-dark .navbar-brand:focus {
+  color:#ee49fd;
+}
+
+.carousel-item {
+  height: 65vh;
+  min-height: 300px;
+  background: no-repeat center center scroll;
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  -o-background-size: contain;
+  background-size: contain;
+}
+
+.carousel{
+  background-color: #6363632a;
+}
+
+.portfolio-item {
+  margin-bottom: 30px;
+}
+
+.btn-primary{
+	background-color: purple;
+  border-color: #b301a4;
+}
+.btn-primary:hover{
+
+background-color: #9301a4;
+border-color: #9300a4;
+
+}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<div><a class="btn btn-primary margin-small" href="/edit_directory">Return to Directory</a></div>
+
+<table>
+  <table class="table">
+  <thead>
+    <tr>
+      {% for key, value in info[0].items() %}
+          {% if key != 'id' %}
+          <th scope="col">{{key}}</th>
+          {% endif %}
+      {% endfor %}
+
+      <th scope="col">-</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <form method="POST" action="/add_info" enctype="multipart/form-data">
+      <input name="info_type" style="display: none;" value="{{post_to}}"></input>
+      {% for key, value in info[0].items() %}
+      {% if key != 'id' %}
+        <td>
+          {% if key == 'season' %}
+          <select name="{{key}}" class="form-control">
+            <option value="none" >None</option>
+            <option value="fall" >Fall</option>
+            <option value="winter">Winter</option>
+            <option value="spring">Spring</option>
+          </select>
+          {% elif key == 'image' %}
+          <input type="file" accept="image/*" name="pic_file" class="form-control"/>
+          {% else %}
+          <input name="{{key}}" placeholder="{{key}}" class="form-control"></input>
+          {% endif %}
+        </td>
+      {% endif %}
+      {% endfor %}
+      <td>
+           <input type="submit" class="btn btn-primary" value="Add"></a>
+      </td>
+      </form>
+    </tr>
+
+    {% for entry in info %}
+    {% set outer_loop = loop %}
+    <tr>
+      {% for key, value in entry.items() %}
+      {% if key != 'id' %}
+      {% if key == 'image' %}
+      <td class="thumbnail-box"><img src="/slide_img/{{value}}"></img></td>
+      {% else %}
+      <td>{{value}}</td>
+      {% endif %}
+      {% endif %}
+      {% endfor %}
+      <td>
+        <a class="btn btn-danger" href="/delete_info?info_type={{post_to}}&id={{outer_loop.index0-1}}">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
