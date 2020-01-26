@@ -16,6 +16,7 @@ app.config["UPLOAD_FOLDER"] = "slide_pics"
 Session(app)
 
 db = SQL(os.environ.get("DATABASE_URL"))
+#db = SQL("postgres://cemmcsvkpzgdtv:5dc36ed6cbed9383d30de9807a6046a608dcd4fdef709f776aa4fddd9cfb77de@ec2-23-21-13-88.compute-1.amazonaws.com:5432/dffm9h2stdsa4i")
 
 #contact list, structure: {name, position, email}
 contacts = [
@@ -44,6 +45,7 @@ slide_pics = [
 
 def add_to_table(table_name, data):
   if table_name == "news":
+    print(data)
     add_news(data)
   if table_name == "upcoming":
     add_upcoming(data)
@@ -198,13 +200,13 @@ def add_info():
     add_to_table("contacts", [request.form.get("name"), request.form.get("position"), request.form.get("email"), request.form.get("season")])
   #if form was news, add event to list
   if request.form.get("info_type") == "news":
-    add_to_table("news", [request.form.get("text")])
+    add_to_table("news", [request.form.get("info")])
   #if form was upcoming, add event to list
   if request.form.get("info_type") == "upcoming":
-   add_to_table("upcoming", [request.form.get("text"), request.form.get("date")])
+   add_to_table("upcoming", [request.form.get("info"), request.form.get("date")])
    #if form was links, add link to list
   if request.form.get("info_type") == "links":
-   add_to_table("links", [request.form.get("text"), request.form.get("url")])
+   add_to_table("links", [request.form.get("info"), request.form.get("url")])
   #if form was slide pics, add pic
   if request.form.get("info_type") == "slide_pics":
     if not request.files['pic_file']:
