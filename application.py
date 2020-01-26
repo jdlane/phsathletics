@@ -15,7 +15,7 @@ app.config["UPLOAD_FOLDER"] = "slide_pics"
 
 Session(app)
 
-db = SQL("postgres://cemmcsvkpzgdtv:5dc36ed6cbed9383d30de9807a6046a608dcd4fdef709f776aa4fddd9cfb77de@ec2-23-21-13-88.compute-1.amazonaws.com:5432/dffm9h2stdsa4i")
+db = SQL(os.environ.get("DATABASE_URL"))
 
 #contact list, structure: {name, position, email}
 contacts = [
