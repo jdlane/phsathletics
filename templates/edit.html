@@ -8,7 +8,7 @@
   <table class="table">
   <thead>
     <tr>
-      {% for key, value in info[0].items() %}
+      {% for key, value in template[0].items() %}
           {% if key != 'id' %}
           <th scope="col">{{key}}</th>
           {% endif %}
@@ -21,7 +21,7 @@
     <tr>
       <form method="POST" action="/add_info" enctype="multipart/form-data">
       <input name="info_type" style="display: none;" value="{{post_to}}"></input>
-      {% for key, value in info[0].items() %}
+      {% for key, value in template[0].items() %}
       {% if key != 'id' %}
         <td>
           {% if key == 'season' %}
@@ -58,7 +58,7 @@
       {% endif %}
       {% endfor %}
       <td>
-        <a class="btn btn-danger" href="/delete_info?info_type={{post_to}}&id={{outer_loop.index0-1}}">Delete</a>
+        <a class="btn btn-danger" href="/delete_info?info_type={{post_to}}&id={{entry.id}}">Delete</a>
       </td>
     </tr>
     {% endfor %}

@@ -3,6 +3,7 @@ import os
 import csv
 from cs50 import SQL
 from tempfile import mkdtemp
+import psycopg2
 from werkzeug.utils import secure_filename
 from flask_session import Session
 
@@ -25,17 +26,17 @@ contacts = [
 
 #news list, structure: {text}
 news = [
-  {'text': None}
+  {'info': None}
 ]
 
 #upcoming, structure {text, date}
 upcoming = [
-  {'text': None, 'date': None}
+  {'info': None, 'date': None}
 ]
 
 #links, structure {text, url}
 links = [
-  {'text': None, 'url': None}
+  {'info': None, 'url': None}
 ]
 
 #slideshow pics, structure {image path, description}
@@ -43,9 +44,23 @@ slide_pics = [
   {'image': None, 'description': None}
 ]
 
+def sort_pics(arr):
+  done = False
+  while not done:
+    done = True
+    for i in range(len(arr)):
+      num = int(arr[i].split(".")[0])
+      num2 = int(arr[i-1].split(".")[0])
+      if i != 0 and num < num2:
+        a = arr[i]
+        b = arr[i-1]
+        arr[i-1] = a
+        arr[i] = b
+        done = False
+  return arr
+
 def add_to_table(table_name, data):
   if table_name == "news":
-    print(data)
     add_news(data)
   if table_name == "upcoming":
     add_upcoming(data)
@@ -54,70 +69,97 @@ def add_to_table(table_name, data):
   if table_name == "contacts":
     add_contacts(data)
 
-def delete_from_csv(filename, index):
-  #open file
-  contents = []
-  csv_read = open(filename, 'r')
-  reader = csv.reader(csv_read, delimiter=' ', quotechar='|')
-  for item in reader:
-    contents.append(item)
-  csv_read.close()
-
-  csv_write = open(filename, "w")
-  writer = csv.writer(csv_write, delimiter=' ', quotechar='|' ,quoting=csv.QUOTE_MINIMAL)
-  i = 0
-  for item in contents:
-    if i != index:
-      writer.writerow(item)
-    i+=1
-  csv_write.close()
+def delete_from_table(table_name, row_id):
+  if table_name == "news":
+    delete_news(row_id)
+  if table_name == "contacts":
+    delete_contacts(row_id)
+  if table_name == "upcoming":
+    delete_upcoming(row_id)
+  if table_name == "links":
+    delete_links(row_id)
 
 def get_contacts():
-    return db.execute("SELECT * FROM contacts;")
+    return db.execute("SELECT * FROM contacts")
 
 def add_contacts(data):
-  return db.execute("INSERT INTO contacts(name, position, email, season) VALUES (:name, :position, :email, :season)", name=data[0], position=data[1], email=data[2], season=data[3])
+  return db.execute("INSERT INTO contacts (name, position, email, season) VALUES (:name, :position, :email, :season)", name=data[0], position=data[1], email=data[2], season=data[3])
+
+def delete_contacts(row_id):
+  db.execute("DELETE FROM contacts WHERE id = :rid", rid=row_id)
 
 def get_news():
-  return db.execute("SELECT * FROM news;")
+  return db.execute("SELECT * FROM news")
 
 def add_news(data):
-  db.execute("INSERT INTO news(info) VALUES (:info)", info=data[0])
+  db.execute("INSERT INTO news (info) VALUES (:info)", info=data[0])
+
+def delete_news(row_id):
+  db.execute("DELETE FROM news WHERE id = :rid", rid=row_id)
 
 def get_links():
-  return db.execute("SELECT * from links;")
+  return db.execute("SELECT * from links")
 
 def add_links(data):
-  db.execute("INSERT INTO links(info, url) VALUES (:news, :url)", info=data[0], url=data[1])
+  db.execute("INSERT INTO links (info, url) VALUES (:news, :url)", info=data[0], url=data[1])
+
+def delete_links(row_id):
+  db.execute("DELETE FROM links WHERE id = :rid", rid=row_id)
 
 def get_upcoming():
-  return db.execute("SELECT * FROM upcoming;")
+  return db.execute("SELECT * FROM upcoming")
 
 def add_upcoming(data):
-  db.execute("INSERT INTO upcoming(info, date) VALUES (:news, :date)", info=data[0], date=data[1])
+  db.execute("INSERT INTO upcoming (info, date) VALUES (:news, :date)", info=data[0], date=data[1])
+
+def delete_upcoming(row_id):
+  db.execute("DELETE FROM upcoming WHERE id = :rid", rid=row_id)
 
 def get_slide_pics():
   #open file
-  with open("slide_pics.csv", newline='') as csvfile:
-    reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
-    #convert reader format to list of dicts
-    items = list(slide_pics)
-    for item in reader:
-      items.append({'image': item[0], 'description': item[1]})
-    return items
+  paths = os.listdir(app.config["UPLOAD_FOLDER"])
+  paths = sort_pics(paths)
+  items = []
+  for path in paths:
+    items.append({'image': path, 'description': db.execute("SELECT description FROM slide_pics WHERE id = :pid", pid = path.split(".")[0])[0]["description"]})
+  return items
 
-def add_slide_pic(pic, description):
-  pic.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(pic.filename)))
-  #add_to_csv("slide_pics.csv", [pic.filename, description])
+def add_slide_pic(pic, name):
+  pic_id = db.execute("SELECT id FROM slide_pics ORDER by id DESC LIMIT 1")
+  if not pic_id:
+    pic_id = 1
+  else:
+    pic_id = pic_id[0]["id"]
+  pic = db.execute("SELECT image FROM slide_pics WHERE id = :pid", pid = pic_id)[0]["image"]
+  blob = bytes(pic)
+  blob = str(blob, "utf-8")
+  blob = bytearray.fromhex(blob)
+  path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(str(int(pic_id))+"."+name))
+  with open(path, "wb") as file:
+    file.write(blob)
+  return path
 
 def delete_slide_pic(index):
   pic_path = get_slide_pics()[index+1]["image"]
-  delete_from_csv("slide_pics.csv", index)
   if os.path.exists(os.path.join(app.config['UPLOAD_FOLDER'], pic_path)):
     os.remove(os.path.join(app.config['UPLOAD_FOLDER'], pic_path))
 
+def check_slide_pics():
+  paths = os.listdir(app.config["UPLOAD_FOLDER"])
+  if not paths:
+    pics = db.execute("SELECT image, id, type FROM slide_pics")
+    for pic in pics:
+      blob = bytes(pic["image"])
+      blob = str(blob, "utf-8")
+      blob = bytearray.fromhex(blob)
+      path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(str(pic["id"])+"."+pic["type"]))
+      with open(path, "wb") as file:
+        file.write(blob)
+
+
 @app.route('/')
 def hello_world():
+  check_slide_pics()
   return render_template("index.html", upcoming_events = get_upcoming(), news = get_news(), links = get_links(), slide_pics = get_slide_pics())
 
 #rest API to serve pics
@@ -175,19 +217,19 @@ def edit():
   if request.method == "GET":
     #if contacts, render edit.html with contacts list
     if request.args.get("info_type") == "contacts":
-      return render_template("edit.html", info = get_contacts(), post_to = "contacts")
+      return render_template("edit.html", info = get_contacts(), post_to = "contacts", template = contacts)
     #if news, render edit.html with news list
     if request.args.get("info_type") == "news":
-      return render_template("edit.html", info = get_news(), post_to = "news")
+      return render_template("edit.html", info = get_news(), post_to = "news", template = news)
     #if upcoming, render edit.html with upcoming list
     if request.args.get("info_type") == "upcoming":
-      return render_template("edit.html", info = get_upcoming(), post_to = "upcoming")
+      return render_template("edit.html", info = get_upcoming(), post_to = "upcoming", template = upcoming)
     #if links, render edit.html with links list
     if request.args.get("info_type") == "links":
-      return render_template("edit.html", info = get_links(), post_to = "links")
+      return render_template("edit.html", info = get_links(), post_to = "links", template = links)
     #if slide pics, render edit.html with pics list
     if request.args.get("info_type") == "slide_pics":
-      return render_template("edit.html", info = get_slide_pics(), post_to = "slide_pics")
+      return render_template("edit.html", info = get_slide_pics(), post_to = "slide_pics", template = slide_pics)
 
 
 @app.route('/add_info', methods=["POST"])
@@ -211,7 +253,13 @@ def add_info():
   if request.form.get("info_type") == "slide_pics":
     if not request.files['pic_file']:
       return redirect(request.referrer)
-    add_slide_pic(request.files['pic_file'], request.form.get("description"))
+    pic = request.files["pic_file"].stream.read()
+    filetype = str(request.files["pic_file"]).split("'")[1].split(".")[1].lower()
+    pic = bytearray(pic)
+    pic = "".join(format(x, "02x") for x in pic)
+    db.execute("INSERT INTO slide_pics (image, type, description) VALUES (:img,:type, :desc)", img=pic, type=filetype, desc = request.form.get("description"))
+    add_slide_pic(bytearray(request.files['pic_file']), filetype)
+  db.execute("COMMIT")
   return redirect(request.referrer)
 
 @app.route('/delete_info', methods=["GET"])
@@ -227,18 +275,19 @@ def delete_info():
     redirect(request.referrer)
   #if list was contacts, remove contact from list
   if info_type == "contacts":
-    delete_from_csv("contacts.csv", int(info_id))
+    delete_from_table("contacts", int(info_id))
   #if list was news, remove event from list
   if info_type == "news":
-    delete_from_csv("news.csv", int(info_id))
+    delete_from_table("news", int(info_id))
   #if list was upcoming, remove event from list
   if info_type == "upcoming":
-    delete_from_csv("upcoming.csv", int(info_id))
+    delete_from_table("upcoming", int(info_id))
   #if list was links, remove link from list
   if info_type == "links":
-    delete_from_csv("links.csv", int(info_id))
+    delete_from_table("links", int(info_id))
   #if list was pics, remove pic from csv and file
   if info_type == "slide_pics":
     delete_slide_pic(int(info_id))
 
+  db.execute("COMMIT")
   return redirect(request.referrer)
