@@ -16,8 +16,8 @@ app.config["UPLOAD_FOLDER"] = "slide_pics"
 
 Session(app)
 
-#db = SQL(os.environ.get("DATABASE_URL"))
-db = SQL("postgres://cemmcsvkpzgdtv:5dc36ed6cbed9383d30de9807a6046a608dcd4fdef709f776aa4fddd9cfb77de@ec2-23-21-13-88.compute-1.amazonaws.com:5432/dffm9h2stdsa4i")
+db = SQL(os.environ.get("DATABASE_URL"))
+#db = SQL("postgres://cemmcsvkpzgdtv:5dc36ed6cbed9383d30de9807a6046a608dcd4fdef709f776aa4fddd9cfb77de@ec2-23-21-13-88.compute-1.amazonaws.com:5432/dffm9h2stdsa4i")
 
 #contact list, structure: {name, position, email}
 contacts = [
@@ -102,7 +102,7 @@ def get_links():
   return db.execute("SELECT * from links")
 
 def add_links(data):
-  db.execute("INSERT INTO links (info, url) VALUES (:news, :url)", info=data[0], url=data[1])
+  db.execute("INSERT INTO links (info, url) VALUES (:info, :url)", info=data[0], url=data[1])
 
 def delete_links(row_id):
   db.execute("DELETE FROM links WHERE id = :rid", rid=row_id)
@@ -111,7 +111,7 @@ def get_upcoming():
   return db.execute("SELECT * FROM upcoming")
 
 def add_upcoming(data):
-  db.execute("INSERT INTO upcoming (info, date) VALUES (:news, :date)", info=data[0], date=data[1])
+  db.execute("INSERT INTO upcoming (info, date) VALUES (:info, :date)", info=data[0], date=data[1])
 
 def delete_upcoming(row_id):
   db.execute("DELETE FROM upcoming WHERE id = :rid", rid=row_id)
