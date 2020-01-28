@@ -16,8 +16,8 @@ app.config["UPLOAD_FOLDER"] = "slide_pics"
 
 Session(app)
 
-db = SQL(os.environ.get("DATABASE_URL"))
-#db = SQL("postgres://cemmcsvkpzgdtv:5dc36ed6cbed9383d30de9807a6046a608dcd4fdef709f776aa4fddd9cfb77de@ec2-23-21-13-88.compute-1.amazonaws.com:5432/dffm9h2stdsa4i")
+#db = SQL(os.environ.get("DATABASE_URL"))
+db = SQL("postgres://cemmcsvkpzgdtv:5dc36ed6cbed9383d30de9807a6046a608dcd4fdef709f776aa4fddd9cfb77de@ec2-23-21-13-88.compute-1.amazonaws.com:5432/dffm9h2stdsa4i")
 
 #contact list, structure: {name, position, email}
 contacts = [
@@ -46,6 +46,7 @@ slide_pics = [
 
 def sort_pics(arr):
   done = False
+  arr.remove("file.gitignore")
   while not done:
     done = True
     for i in range(len(arr)):
@@ -121,7 +122,8 @@ def get_slide_pics():
   paths = sort_pics(paths)
   items = []
   for path in paths:
-    items.append({'image': path, 'description': db.execute("SELECT description FROM slide_pics WHERE id = :pid", pid = path.split(".")[0])[0]["description"]})
+    if path != "file.gitignore":
+      items.append({'image': path, 'description': db.execute("SELECT description FROM slide_pics WHERE id = :pid", pid = path.split(".")[0])[0]["description"]})
   return items
 
 def add_slide_pic(pic, name):
@@ -146,7 +148,7 @@ def delete_slide_pic(index):
 
 def check_slide_pics():
   paths = os.listdir(app.config["UPLOAD_FOLDER"])
-  if not paths:
+  if len(paths) < 2:
     pics = db.execute("SELECT image, id, type FROM slide_pics")
     for pic in pics:
       blob = bytes(pic["image"])
