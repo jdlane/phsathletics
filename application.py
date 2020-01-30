@@ -146,6 +146,7 @@ def delete_slide_pic(index):
   pic_path = str(index)+"."+db.execute("SELECT type FROM slide_pics WHERE id = :index", index=index)[0]["type"]
   if os.path.exists(os.path.join(app.config['UPLOAD_FOLDER'], pic_path)):
     os.remove(os.path.join(app.config['UPLOAD_FOLDER'], pic_path))
+  db.execute("DELETE FROM slide_pics WHERE id = :pid", pid = index)
 
 def check_slide_pics():
   paths = os.listdir(app.config["UPLOAD_FOLDER"])
