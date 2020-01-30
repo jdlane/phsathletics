@@ -25,7 +25,7 @@ ul{
 }
 
 .carousel-indicators li{
-  border: 1px solid rgb(46, 46, 46);
+  //border: 1px solid rgb(46, 46, 46);
   background-color: #350031;
 }
 
@@ -38,19 +38,17 @@ ul{
 }
 
 .thumbnail-box{
-  width: 70px;
-  height: 70px;
+
   object-fit: contain;
 }
 
 .thumbnail-box img{
   width: 70px;
   height: 70px;
-  object-fit: contain;
 }
 
 .navbar-dark .navbar-brand {
-  color: #c63ad3;
+  color: #000000;
 }
 
 .navbar-dark .navbar-brand:hover, .navbar-dark .navbar-brand:focus {

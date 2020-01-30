@@ -11,9 +11,7 @@
 
     <ul>
       {% for event in upcoming %}
-      {% if loop.index0 != 0 %}
       <li>{{event.date}}: {{event.info}}</li>
-      {% endif %}
       {% endfor %}
     </ul>
 

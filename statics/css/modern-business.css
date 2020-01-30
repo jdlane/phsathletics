@@ -7,25 +7,57 @@ body {
   padding-top: 56px;
 }
 
+.margin-small{
+  margin: 20px;
+}
+
+.navbar{
+  background-color: #9301c5;
+}
+
+ul{
+   list-style-image: url('/img/pawprint.png');
+}
+
+
 #tato{
   background-size: 80% 80%;
 }
 
 .carousel-indicators li{
-  //border: 1px solid rgb(46, 46, 46);
+  /*border: 1px solid rgb(46, 46, 46);*/
   background-color: #350031;
 }
 
+.text-white{
+  color: #FFFFFF !important;
+  text-shadow: -2px 2px #000000;
+}
+
 .text-purple{
-  color:#b301a4;
+  color:#9301c5;
+}
+
+.text-dark-purple{
+  color:#9a4caa;
+}
+
+.thumbnail-box{
+
+  object-fit: contain;
+}
+
+.thumbnail-box img{
+  width: 70px;
+  height: 70px;
 }
 
 .navbar-dark .navbar-brand {
-  color: #b301a4;
+  color: #aa6cca;
 }
 
 .navbar-dark .navbar-brand:hover, .navbar-dark .navbar-brand:focus {
-  color:#e00acf;
+  color: #ca8cea;
 }
 
 .carousel-item {
@@ -39,11 +71,15 @@ body {
 }
 
 .carousel{
-  background-color: #6363632a;
+  background-color: #F6F6F6F5;
 }
 
 .portfolio-item {
   margin-bottom: 30px;
+}
+
+.purple-home{
+  background-color: #7a2c9a;
 }
 
 .btn-primary{
@@ -52,7 +88,7 @@ body {
 }
 .btn-primary:hover{
 
-background-color: #350031;
-border-color: #350031;
+background-color: #9301a4;
+border-color: #9300a4;
 
 }
