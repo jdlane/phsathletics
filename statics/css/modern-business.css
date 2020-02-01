@@ -19,6 +19,16 @@ ul{
    list-style-image: url('/img/pawprint.png');
 }
 
+footer{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  margin-bottom: -15px;
+}
+
+.page-container{
+  position: relative;
+}
 
 #tato{
   background-size: 80% 80%;
@@ -53,11 +63,19 @@ ul{
 }
 
 .navbar-dark .navbar-brand {
-  color: #aa6cca;
+  color: #EEEEEE;
 }
 
 .navbar-dark .navbar-brand:hover, .navbar-dark .navbar-brand:focus {
-  color: #ca8cea;
+  color: #da9cfa;
+}
+
+.navbar-dark .nav-link{
+  color: #eeeeeecc !important;
+}
+
+.navbar-dark .nav-link:hover{
+  color: #eeeeeeff !important;
 }
 
 .carousel-item {

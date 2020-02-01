@@ -21,7 +21,7 @@
 
 </head>
 <body>
-
+  <div class="page-container">
   <!-- Navigation -->
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
@@ -63,13 +63,9 @@
 
 {% block main %}{% endblock %}
 
-<!-- Footer
-  <footer class="py-5 bg-dark">
-    <div class="container">
-      <p class="m-0 text-center text-white">Created by the PHS Coding Club</p>
-    </div>-->
-    <!-- /.container
-  </footer>-->
+</div>
+
+{% block footer %}{% endblock %}
 
   <!-- Bootstrap core JavaScript -->
   <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js')}}"></script>
