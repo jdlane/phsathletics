@@ -187,6 +187,10 @@ def upcoming_events():
 def news_page():
   return render_template("news.html", news=get_news())
 
+@app.route('/registration')
+def registration():
+  return render_template("registration.html")
+
 @app.route('/edit_directory')
 def edit_directory():
   #if logged in redirect to edit directory
@@ -207,7 +211,7 @@ def login():
     if not request.form.get("username") or not request.form.get("password"):
       return redirect(request.referrer)
     #if correct username/password (subject to change) start admin session and redirect to edit page
-    if request.form.get("username") == "0" and request.form.get("password") == "0":
+    if request.form.get("username") == "phsathletics" and request.form.get("password") == "codingclub2020":
       session.clear()
       session["admin"] = True;
       return redirect("/edit_directory")
