@@ -4,7 +4,7 @@ import csv
 from cs50 import SQL
 from tempfile import mkdtemp
 import psycopg2
-from werkzeug.utils import secure_filename
+#from werkzeug.utils import secure_filename
 from flask_session import Session
 
 app = Flask(__name__, static_url_path = "", static_folder = "statics")
@@ -137,7 +137,7 @@ def add_slide_pic(pic, name):
   blob = bytes(pic)
   blob = str(blob, "utf-8")
   blob = bytearray.fromhex(blob)
-  path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(str(int(pic_id))+"."+name))
+  path = os.path.join(app.config['UPLOAD_FOLDER'], str(int(pic_id))+"."+name)
   with open(path, "wb") as file:
     file.write(blob)
   return path
@@ -156,7 +156,7 @@ def check_slide_pics():
       blob = bytes(pic["image"])
       blob = str(blob, "utf-8")
       blob = bytearray.fromhex(blob)
-      path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(str(pic["id"])+"."+pic["type"]))
+      path = os.path.join(app.config['UPLOAD_FOLDER'], str(pic["id"])+"."+pic["type"])
       with open(path, "wb") as file:
         file.write(blob)
 
