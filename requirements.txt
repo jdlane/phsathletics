@@ -4,4 +4,3 @@ Flask-Session
 gunicorn
 requests
 psycopg2
-apscheduler

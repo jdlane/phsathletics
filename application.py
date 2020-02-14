@@ -213,7 +213,7 @@ def login():
     #if correct username/password (subject to change) start admin session and redirect to edit page
     if request.form.get("username") == "phsathletics" and request.form.get("password") == "codingclub2020":
       session.clear()
-      session["admin"] = True;
+      session["admin"] = True
       return redirect("/edit_directory")
     return redirect("/")
 
