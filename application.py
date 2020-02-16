@@ -4,7 +4,7 @@ import csv
 from cs50 import SQL
 from tempfile import mkdtemp
 import psycopg2
-#from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename
 from flask_session import Session
 
 app = Flask(__name__, static_url_path = "", static_folder = "statics")
@@ -14,10 +14,10 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["UPLOAD_FOLDER"] = "slide_pics"
 
-Session(app)
+sess = Session(app)
 
-db = SQL(os.environ.get("DATABASE_URL"))
-#db = SQL("postgres://owetrzsawsbciy:64c6bba7e0eff84f8d5976fbb7ddf952b76be2a52c65885edb6523f446c7b8b5@ec2-52-55-59-250.compute-1.amazonaws.com:5432/ddgvmapjoelu1m")
+#db = SQL(os.environ.get("DATABASE_URL"))
+db = SQL("postgres://owetrzsawsbciy:64c6bba7e0eff84f8d5976fbb7ddf952b76be2a52c65885edb6523f446c7b8b5@ec2-52-55-59-250.compute-1.amazonaws.com:5432/ddgvmapjoelu1m")
 
 #contact list, structure: {name, position, email}
 contacts = [
@@ -137,7 +137,7 @@ def add_slide_pic(pic, name):
   blob = bytes(pic)
   blob = str(blob, "utf-8")
   blob = bytearray.fromhex(blob)
-  path = os.path.join(app.config['UPLOAD_FOLDER'], str(int(pic_id))+"."+name)
+  path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(str(int(pic_id))+"."+name))
   with open(path, "wb") as file:
     file.write(blob)
   return path
@@ -156,7 +156,7 @@ def check_slide_pics():
       blob = bytes(pic["image"])
       blob = str(blob, "utf-8")
       blob = bytearray.fromhex(blob)
-      path = os.path.join(app.config['UPLOAD_FOLDER'], str(pic["id"])+"."+pic["type"])
+      path = os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(str(pic["id"])+"."+pic["type"]))
       with open(path, "wb") as file:
         file.write(blob)
 
