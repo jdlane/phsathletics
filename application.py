@@ -14,7 +14,7 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["UPLOAD_FOLDER"] = "slide_pics"
 
-sess = Session(app)
+#sess = Session(app)
 
 #db = SQL(os.environ.get("DATABASE_URL"))
 db = SQL("postgres://owetrzsawsbciy:64c6bba7e0eff84f8d5976fbb7ddf952b76be2a52c65885edb6523f446c7b8b5@ec2-52-55-59-250.compute-1.amazonaws.com:5432/ddgvmapjoelu1m")
