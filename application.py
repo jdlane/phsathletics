@@ -194,11 +194,11 @@ def registration():
 @app.route('/edit_directory')
 def edit_directory():
   #if logged in redirect to edit directory
-  if True:#session.get("admin"):
-    return render_template("editdir.html")
+  #if True:#session.get("admin"):
+   # return render_template("editdir.html")
   #else redirect to login
-  else:
-    return render_template("login.html")
+  #else:
+  return render_template("login.html")
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
@@ -214,7 +214,8 @@ def login():
     if request.form.get("username") == "phsathletics" and request.form.get("password") == "codingclub2020":
       #session.clear()
       #session["admin"] = True
-      return redirect("/edit_directory")
+      #return redirect("/edit_directory")
+      return render_template("editdir.html")
     return redirect("/")
 
 @app.route('/edit', methods=["GET", "POST"])
@@ -238,7 +239,7 @@ def edit():
     #if slide pics, render edit.html with pics list
     if request.args.get("info_type") == "slide_pics":
       return render_template("edit.html", info = get_slide_pics(), post_to = "slide_pics", template = slide_pics)
-
+  return redirect("/login")
 
 @app.route('/add_info', methods=["POST"])
 def add_info():
