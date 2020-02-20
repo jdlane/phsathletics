@@ -215,7 +215,7 @@ def login():
       session.clear()
       session["admin"] = True
       return redirect("/edit_directory")
-    return redirect("login")
+    return render_template("login.html", message="Incorrect username or password")
 
 @app.route('/edit', methods=["GET", "POST"])
 def edit():
