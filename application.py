@@ -14,10 +14,10 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["UPLOAD_FOLDER"] = "slide_pics"
 
-#sess = Session(app)
+Session(app)
 
-#db = SQL(os.environ.get("DATABASE_URL"))
-db = SQL("postgres://owetrzsawsbciy:64c6bba7e0eff84f8d5976fbb7ddf952b76be2a52c65885edb6523f446c7b8b5@ec2-52-55-59-250.compute-1.amazonaws.com:5432/ddgvmapjoelu1m")
+db = SQL(os.environ.get("DATABASE_URL"))
+#db = SQL("postgres://owetrzsawsbciy:64c6bba7e0eff84f8d5976fbb7ddf952b76be2a52c65885edb6523f446c7b8b5@ec2-52-55-59-250.compute-1.amazonaws.com:5432/ddgvmapjoelu1m")
 
 #contact list, structure: {name, position, email}
 contacts = [
@@ -194,8 +194,8 @@ def registration():
 @app.route('/edit_directory')
 def edit_directory():
   #if logged in redirect to edit directory
-  #if True:#session.get("admin"):
-   # return render_template("editdir.html")
+  if session.get("admin"):
+    return render_template("editdir.html")
   #else redirect to login
   #else:
   return render_template("login.html")
@@ -212,17 +212,16 @@ def login():
       return redirect(request.referrer)
     #if correct username/password (subject to change) start admin session and redirect to edit page
     if request.form.get("username") == "phsathletics" and request.form.get("password") == "codingclub2020":
-      #session.clear()
-      #session["admin"] = True
-      #return redirect("/edit_directory")
-      return render_template("editdir.html")
-    return redirect("/")
+      session.clear()
+      session["admin"] = True
+      return redirect("/edit_directory")
+    return redirect("login")
 
 @app.route('/edit', methods=["GET", "POST"])
 def edit():
   #redirect if not logged in as admin
-  #if not session.get("admin"):
- #return redirect("/login")
+  if not session.get("admin"):
+    return redirect("/login")
   if request.method == "GET":
     #if contacts, render edit.html with contacts list
     if request.args.get("info_type") == "contacts":
@@ -244,8 +243,8 @@ def edit():
 @app.route('/add_info', methods=["POST"])
 def add_info():
   #redirect if not logged in as admin
-  #if not session.get("admin"):
-   # return redirect("/login")
+  if not session.get("admin"):
+    return redirect("/login")
   #if form was contacts, add contact to list
   if request.form.get("info_type") == "contacts":
     add_to_table("contacts", [request.form.get("name"), request.form.get("position"), request.form.get("email"), request.form.get("season")])
@@ -274,8 +273,8 @@ def add_info():
 @app.route('/delete_info', methods=["GET"])
 def delete_info():
   #redirect if not logged in as admin
- # if not session.get("admin"):
-  #  return redirect("/login")
+  if not session.get("admin"):
+    return redirect("/login")
   #get info from get request
   info_type = request.args.get("info_type")
   info_id = request.args.get("id")
